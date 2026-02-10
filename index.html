@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neon Quiz Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg"></div>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-logo-wrap">
+        <span class="brand-icon">⚡</span>
+        <img src="assets/logo.jpg" alt="Logo" id="brandLogo" class="brand-logo">
+        <span class="brand-corner-badge">Bakry</span>
+        <div class="brand-logo-caption">Bakry</div>
+      </div>
+      <span class="brand-name">Neon Quiz</span>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" id="openLeaderboard" aria-label="Leaderboard">🏆</button>
+      <button class="icon-btn" id="openSettings" aria-label="Pengaturan">⚙️</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card view active" id="viewStart">
+      <div class="hero-logo"><img src="assets/logo.jpg" alt="Logo" id="heroLogo"></div>
+      <h1>Siap Adu Otak?</h1>
+      <p class="muted">Masukkan nama, pilih kategori, lalu mulai.</p>
+      <div class="grid two">
+        <div class="field">
+          <label>Nama Pemain</label>
+          <input type="text" id="playerName" placeholder="Contoh: Alex" maxlength="18">
+        </div>
+        <div class="field">
+          <label>Kategori</label>
+          <select id="category">
+            <option value="semua">Semua</option>
+            <option value="umum">Umum</option>
+            <option value="teknologi">Teknologi</option>
+            <option value="sains">Sains</option>
+            <option value="hiburan">Hiburan</option>
+            <option value="sejarah-islam">Sejarah Islam</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid two">
+        <div class="field">
+          <label>Kesulitan</label>
+          <select id="difficulty">
+            <option value="mudah">Mudah</option>
+            <option value="sedang">Sedang</option>
+            <option value="sulit">Sulit</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Jumlah Soal</label>
+          <input type="number" id="questionCount" min="5" max="50" value="10">
+        </div>
+      </div>
+      <button class="btn primary" id="startBtn">Mulai</button>
+    </section>
+
+    <section class="card view" id="viewQuiz">
+      <div class="topbar">
+        <div class="stats">
+          <div class="chip" id="chipCategory">Kategori</div>
+          <div class="chip" id="chipDifficulty">Kesulitan</div>
+        </div>
+        <div class="score">
+          <span>Skor</span>
+          <strong id="score">0</strong>
+        </div>
+      </div>
+
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="quiz-wrap">
+        <div class="timer">
+          <svg viewBox="0 0 36 36" class="circular">
+            <path class="bg" pathLength="100" d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            <path class="ring" id="timerRing" pathLength="100" d="M18 2.0845
+              a 15.9155 15.9155 0 0 1 0 31.831
+              a 15.9155 15.9155 0 0 1 0 -31.831" />
+          </svg>
+          <div class="timer-text" id="timeText">15</div>
+        </div>
+
+        <div class="question">
+          <div class="q-index" id="qIndex">1</div>
+          <h2 class="q-text" id="qText"></h2>
+        </div>
+
+        <div class="options" id="options"></div>
+
+        <div class="actions">
+          <button class="btn ghost" id="skipBtn">Lewati</button>
+          <button class="btn next" id="nextBtn" disabled>Berikutnya</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card view" id="viewResult">
+      <h2>Hasil</h2>
+      <div class="result-grid">
+        <div class="result-card">
+          <span class="muted">Skor</span>
+          <div class="big" id="finalScore">0</div>
+        </div>
+        <div class="result-card">
+          <span class="muted">Akurasi</span>
+          <div class="big" id="finalAccuracy">0%</div>
+        </div>
+        <div class="result-card">
+          <span class="muted">Waktu Sisa Total</span>
+          <div class="big" id="finalTime">0d</div>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button class="btn primary" id="playAgain">Main Lagi</button>
+        <button class="btn" id="saveScore">Simpan ke Leaderboard</button>
+      </div>
+      <div class="leaderboard" id="leaderboard"></div>
+    </section>
+  </main>
+
+  <div class="modal hidden" id="settingsModal">
+    <div class="modal-card">
+      <h3>Pengaturan</h3>
+      <div class="field">
+        <label>Audio Efek</label>
+        <label class="switch">
+          <input type="checkbox" id="toggleSound" checked>
+          <span></span>
+        </label>
+      </div>
+      <div class="field">
+        <label>Logo Kustom</label>
+        <input type="file" id="logoUpload" accept="image/*">
+        <button class="btn" id="resetLogo">Reset Logo</button>
+      </div>
+      <div class="field">
+        <label>Background Kustom (Halaman)</label>
+        <input type="file" id="bgUpload" accept="image/*">
+        <button class="btn" id="resetBg">Reset Background</button>
+      </div>
+      <button class="btn" id="closeSettings">Tutup</button>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="leaderboardModal">
+    <div class="modal-card">
+      <h3>Leaderboard</h3>
+      <div id="leaderboardModalList"></div>
+      <button class="btn" id="closeLeaderboard">Tutup</button>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <span>© Neon Quiz</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
